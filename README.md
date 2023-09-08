@@ -1,7 +1,5 @@
 # Primeiro_Projeto_De_LingProg
 
-[toc]
-
 ---
 
 ## Descrição do Projeto
