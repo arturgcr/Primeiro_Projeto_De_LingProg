@@ -1,0 +1,13 @@
+Historico de mensagens de Beatriz
+
+ Data: 2023-09-05
+ Destinatario: artur@gmail
+ Mensagem: mensagem
+ Remetente: beatriz@gmail
+ Horario de envio: 23:11:27
+
+ Data: 2023-09-05
+ Destinatario: arturtestebrabo@teste
+ Mensagem: mensagem bonita
+ Remetente: beatriz@gamil
+ Horario de envio: 23:12:43

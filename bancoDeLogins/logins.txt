@@ -1,0 +1,3 @@
+['Artur', 'senha123']
+['Aurora', 'senha123']
+['Beatriz', 'cachorrocaramelo']
