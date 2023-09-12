@@ -11,14 +11,18 @@ class GeradorPDF:
                 c = canvas.Canvas(nome_arquivo_pdf)
                 
                 # Lê o conteúdo do arquivo de texto e escreve no PDF
+                contador = 750
                 for linha in arquivo_txt:
-                    c.drawString(100, 750, linha.strip())
-                    c.showPage()
+                    c.drawString(100, contador, linha.strip())
+                    contador -= 20
+                    if contador <= 50:
+                        contador = 750
+                        c.showPage()
                 
                 # Fecha o objeto Canvas, o que gera o PDF final
                 c.save()
-                print(f'PDF gerado com sucesso: {nome_arquivo_pdf}')
+                print("PDF gerado com sucesso: " + str(nome_arquivo_pdf))
         except FileNotFoundError:
-            print(f'Arquivo de texto não encontrado: {nome_arquivo_txt}')
+            print("Arquivo de texto não encontrado: " + str(nome_arquivo_txt))
         except Exception as e:
-            print(f'Ocorreu um erro ao gerar o PDF: {str(e)}')
+            print("Ocorreu um erro ao gerar o PDF: " + str(e))

@@ -1,3 +1,2 @@
+['usuario1teste', 'usuario1teste']
 ['Artur', 'senha123']
-['Aurora', 'senha123']
-['Beatriz', 'cachorrocaramelo']

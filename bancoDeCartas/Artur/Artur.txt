@@ -1,7 +1,7 @@
-Historico de mensagens de Artur
+Historico de mensagens de Artur:
 
- Data: 2023-09-04
- Destinatario: aurora@gmail
- Mensagem: mensagem legal para um teste muito legal
- Remetente: artur@gmail
- Horario de envio: 22:18:38
+Data: 2023-09-12
+Destinatário: teste@gmail
+Mensagem: mensagem maneira
+Remetente: artur@gmail
+Horário de envio: 01:00:12

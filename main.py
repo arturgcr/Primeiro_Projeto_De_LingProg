@@ -29,103 +29,108 @@ falta:
   - txt de recebidos
 
 """
-#GeradorPDF.gerar_pdf("bancoDeLogins/logins.txt", "logings.pdf")
 
+# Inicializa o Flask
 app = Flask(__name__)
 
+# Rota da página inicial - tela de login
 @app.route("/")
-def hello_agendeca(): 
-  return render_template("telaDeLogin.html")
+def tela_inicial():
+    return render_template("telaDeLogin.html")
 
-# Cria a tela de login
+# Rota do login
 @app.route("/login", methods=["POST"])
 def login():
+    # Verifica se o botão de cadastro foi apertado
+    if 'cadastro' in request.form:
+      return render_template("telaDeCadastro.html")
+
+    # Define o nome como global para ser acessado por demais telas
     global nome
+    # Obtém o nome e a senha dos campos de texto
+    nome = request.form.get("nome")
+    senha = request.form.get("senha")
 
-    if request.method == "POST":
-        if 'cadastro' in request.form:
-            cadastro = request.form['cadastro']
-            if cadastro == 'cadastro':
-                return render_template("telaDeCadastro.html")
+    # Abre o arquivo de logins no modo leitura para verificar senha e nome de usuario
+    with open("bancoDeLogins/logins.txt", 'r') as arquivo:
+        for linha in arquivo:
+            # Avalia a linha como uma lista de informações
+            lista_info = eval(linha.strip())
 
-        nome = request.form.get("nome")
-        senha = request.form.get("senha")
+            # Verifica se o nome e a senha de usuario batem
+            if nome == lista_info[0] and senha == lista_info[1]:
+                # Redireciona para a página de escrever carta se as credenciais estiverem corretas
+                return render_template("escreverCarta.html")
 
-        with open("bancoDeLogins/logins.txt", 'r') as arquivo:
-            lista_logins = arquivo.readlines()
+    # Redireciona de volta para a tela de login em caso de falha
+    return render_template("telaDeLogin.html")
 
-            for linha in lista_logins:
-                linha = linha.strip()
-                lista_info = eval(linha)
-                if nome == lista_info[0] and senha == lista_info[1]:
-                    return render_template("escreverCarta.html")
-
-        return render_template("telaDeLogin.html")
-
-# Cria a tela de cadastro
-@app.route("/menu", methods = ["POST"])
-def menu():
-  pass
-# Cria a tela de cadastro
-@app.route("/cadastro", methods = ["POST"])
+# Rota do cadastro
+@app.route("/cadastro", methods=["POST"])
 def cadastro():
-  nomeCadastro = request.form.get("nome")
-  senha = request.form.get("senha")
-  confirmarSenha = request.form.get("senhaConfirmacao")
-  usuario = []
-  usuario.append(nomeCadastro)
-  usuario.append(senha)
-  caminho_pasta_usuario = "bancoDeCartas/" + str(nomeCadastro)
-  
-  if request.method == 'POST':
-      if 'botao' in request.form:
-        confirmar = request.form['botao']
-        if confirmar == 'Confirmar':
-          if(confirmarSenha == senha and len(senha) >= 5 and len(nomeCadastro) >= 4 and not os.path.exists(caminho_pasta_usuario)):
-            with open("bancoDeLogins/logins.txt", 'a') as arquivo:
-              arquivo.write("\n"+str(usuario))
-              arquivo.close()
-              os.makedirs(caminho_pasta_usuario)  
-            with open(str(caminho_pasta_usuario) + "/" + str(nomeCadastro) +".txt", "a") as arquivo:
-              arquivo.write("Historico de mensagens de " + str(nomeCadastro))
-              arquivo.close()
+    # Verifica se o botão de voltar para a tela de login foi apertado, retornando a aba login
+    if 'voltar' in request.form:
+      return render_template("telaDeLogin.html")
 
-              return render_template("telaDeLogin.html")
-          else:
-            return render_template("errou.html")
-          
-      if 'voltar' in request.form:
-        voltar = request.form['voltar']
-        if voltar == "Voltar":
-           return render_template("telaDeLogin.html")
+    # Obtém os dados dos campos de texto da tela de cadastro
+    nomeCadastro = request.form.get("nome")
+    senha = request.form.get("senha")
+    confirmarSenha = request.form.get("senhaConfirmacao")
+    # O tratamento lower foi feito pa padronizar os arquivos e facilitar a verificação de nomes repetidos
+    caminho_pasta_usuario = "bancoDeCartas/" + str(nomeCadastro).lower()
 
-# Cria a tela de escrita da carta
-@app.route('/escreverCarta', methods=["POST"])
-def formulario():
     if request.method == 'POST':
-        if 'botao' in request.form:
-            enviar_carta = request.form['botao']
-            if enviar_carta == 'enviar':
-                seu_email = request.form.get("from")
-                email_pessoa = request.form.get("to")
-                data = request.form.get("date")
-                mensagem = request.form.get("message")
-                with open("bancoDeCartas/" + str(nome) + "/" + str(nome) +".txt", "a") as arquivo:
-                  horaAtual = datetime.now()
-                  arquivo.write(str("\n\n Data: " + data + "\n Destinatario: " + email_pessoa + "\n Mensagem: "+mensagem+ "\n Remetente: " + seu_email + "\n Horario de envio: "+str(horaAtual.strftime("%H:%M:%S"))))
-                  arquivo.close()
-          
+        # Verifica se as condições para o cadastro são atendidas (senha de ter mais de 5 letras, nome mais de 4 e não ter sido cadastrado ainda)
+        if confirmarSenha == senha and len(senha) >= 5 and len(nomeCadastro) >= 4 and not os.path.exists(caminho_pasta_usuario):
+            # Adiciona as informações de login ao banco txt de logins
+            with open("bancoDeLogins/logins.txt", 'a') as arquivo:
+                arquivo.write("\n"+str([nomeCadastro, senha]))
+                
+            # Cria a pasta do usuário
+            os.makedirs(caminho_pasta_usuario)
+            # Cria o arquivo com o historico de envio do usuario
+            with open(str(caminho_pasta_usuario)+"/"+str(nomeCadastro)+".txt", "w") as arquivo_cartas:
+                arquivo_cartas.write("Historico de mensagens de " + str(nomeCadastro) + ":")
+            
+            # Redireciona de volta para a tela de login
+            return render_template("telaDeLogin.html")
+    
+    # Reseta a pagina em caso de erro
+    return render_template("telaDeCadastro.html")
+
+# Rota para a aba de escrever cartas
+@app.route('/escreverCarta', methods=["POST"])
+def escrever_carta():
+    if request.method == 'POST':
+        # Obtém os dados do formulário para escrever uma carta
+        seu_email = request.form.get("from")
+        email_pessoa = request.form.get("to")
+        data = request.form.get("date")
+        mensagem = request.form.get("message")
+        hora_atual = datetime.now().strftime("%H:%M:%S")
+
+        caminho_carta = "bancoDeCartas/"+str(nome).lower()+"/"+str(nome)+".txt"
+
+        # Escreve a carta no arquivo correspondente
+        with open(caminho_carta, "a") as arquivo:
+            # Escreve no histórico de envio do usuario
+            arquivo.write("\n\nData: "+str(data)+"\nDestinatario: "+
+            str(email_pessoa)+"\nMensagem: "+str(mensagem)+"\nRemetente: "+str(seu_email)+
+            "\nHorario de envio: "+str(hora_atual))
+
+    # Redireciona de volta para a tela de login
     return render_template('telaDeLogin.html')
 
-
-# Daqui pra baixo, tudo serve so pra gerar o site e abrir o seu navegador nele de forma automática
-def iniciaSite():
+# Função para iniciar o site
+def inicia_site():
     app.run()
 
 if __name__ == '__main__':
-    threadIniciaSite = threading.Thread(target=iniciaSite)
-    threadIniciaSite.start()
+    # Inicia o site em uma thread separada
+    threading.Thread(target=inicia_site).start()
+    
     try:
-      webbrowser.open("http://localhost:5000/")
-    except:
-      pass
+        # Abre o navegador automaticamente na página local
+        webbrowser.open("http://localhost:5000/")
+    except Exception as e:
+        print("Erro ao abrir o navegador: " + str(e))
