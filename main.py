@@ -56,7 +56,6 @@ def login():
         for linha in arquivo:
             # Avalia a linha como uma lista de informações
             lista_info = eval(linha.strip())
-
             # Verifica se o nome e a senha de usuario batem
             if nome == lista_info[0] and senha == lista_info[1]:
                 # Redireciona para a página de escrever carta se as credenciais estiverem corretas
@@ -89,7 +88,7 @@ def cadastro():
             # Cria a pasta do usuário
             os.makedirs(caminho_pasta_usuario)
             # Cria o arquivo com o historico de envio do usuario
-            with open(str(caminho_pasta_usuario)+"/"+str(nomeCadastro)+".txt", "w") as arquivo_cartas:
+            with open(str(caminho_pasta_usuario)+"/historico_de_"+str(nomeCadastro)+".txt", "w") as arquivo_cartas:
                 arquivo_cartas.write("Historico de mensagens de " + str(nomeCadastro) + ":")
             
             # Redireciona de volta para a tela de login
@@ -101,9 +100,11 @@ def cadastro():
 # Rota para a aba de escrever cartas
 @app.route('/escreverCarta', methods=["POST"])
 def escrever_carta():
+    # Escreve o caminho
+    caminho_carta = "bancoDeCartas/"+str(nome).lower()+"/historico_de_"+str(nome)+".txt"
     if request.method == 'POST':
         if 'gerar_pdf' in request.form:
-            GeradorPDF.gerar_pdf("bancoDeCartas/"+str(nome).lower()+"/"+str(nome)+".txt", "bancoDeCartas/"+str(nome).lower()+"/"+"historicoDe"+str(nome)+".pdf")
+            GeradorPDF.gerar_pdf(caminho_carta, "bancoDeCartas/"+str(nome).lower()+"/historico_de_"+str(nome)+".pdf")
             return render_template("escreverCarta.html")
 
         if 'botao' in request.form:
@@ -114,9 +115,28 @@ def escrever_carta():
             mensagem = request.form.get("message")
             hora_atual = datetime.now().strftime("%H:%M:%S")
 
-            caminho_carta = "bancoDeCartas/"+str(nome).lower()+"/"+str(nome)+".txt"
+            # Faz uma lista dos arquivos que estão nas pasta do usuario
+            arquivos_na_pasta = os.listdir("bancoDeCartas/"+str(nome).lower())
+            contador = 0
+            for verifica in range(len(arquivos_na_pasta)):
+                if ".txt" in arquivos_na_pasta[verifica]:
+                    contador += 1
+            print(str(contador))
+            # Cria o caminho para o arquivo com a enumerção de arquivos do usuario
+            caminho_carta = "bancoDeCartas/"+str(nome).lower()+"/carta_"+str(contador)+"_de_"+str(nome)+".txt"
 
             # Escreve a carta no arquivo correspondente
+            with open(caminho_carta, "a") as arquivo:
+                # Escreve no histórico de envio do usuario
+                arquivo.write("\n\nData: "+str(data)+"\nDestinatario: "+
+                str(email_pessoa)+"\nMensagem: "+str(mensagem)+"\nRemetente: "+str(seu_email)+
+                "\nHorario de envio: "+str(hora_atual))
+
+            GeradorPDF.gerar_pdf(caminho_carta, "bancoDeCartas/"+str(nome).lower()+"/carta_"+str(contador)+"_de_"+str(nome)+".pdf")
+
+            # Sobreescreve a variavel para usar outro caminho
+            caminho_carta = "bancoDeCartas/"+str(nome).lower()+"/historico_de_"+str(nome)+".txt"
+            # Escreve a carta no historico do usuario
             with open(caminho_carta, "a") as arquivo:
                 # Escreve no histórico de envio do usuario
                 arquivo.write("\n\nData: "+str(data)+"\nDestinatario: "+

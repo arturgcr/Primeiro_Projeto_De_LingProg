@@ -12,26 +12,26 @@
         <form method="POST" action="/escreverCarta">
             <div class="input-container">
                 <label for="from">De:</label>
-                <input type="email" id="from" name="from">
+                <input type="text" id="from" name="from" required>
             </div>
             <div class="input-container">
                 <label for="to">Para:</label>
-                <input type="email" id="to" name="to">
+                <input type="text" id="to" name="to" required>
             </div>
             <div class="input-container">
                 <label for="subject">Assunto:</label>
-                <input type="text" id="subject" name="subject">
+                <input type="text" id="subject" name="subject" required>
             </div>
             <div class="input-container">
                 <label for="date">Data:</label>
-                <input type="date" id="date" name="date">
+                <input type="date" id="date" name="date" required>
             </div>
             <div class="input-container">
                 <label for="message">Mensagem:</label>
                 <textarea id="message" name="message" rows="4"></textarea>
             </div>
-            <input type = "submit" name = "gerar_pdf" value="Gerar Histórico"></input>
-            <input type="submit" name = "botao" value="Enviar"></input>
+            <input type="submit" name="gerar_pdf" value="Gerar Histórico" formnovalidate></input>
+            <input type="submit" name="botao" value="Enviar"></input>
         </form>
     </div>
 </body>

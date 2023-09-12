@@ -1,4 +1,2 @@
-['usuario1teste', 'usuario1teste']
-['Artur', 'senha123']
-['Eduardo dos Santos', '123456']
-['RebeccaGS', 'oioi']
+['administrador', 'adm123']
+['Artur', 'senha1']
