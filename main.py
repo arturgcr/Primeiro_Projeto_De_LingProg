@@ -102,24 +102,29 @@ def cadastro():
 @app.route('/escreverCarta', methods=["POST"])
 def escrever_carta():
     if request.method == 'POST':
-        # Obtém os dados do formulário para escrever uma carta
-        seu_email = request.form.get("from")
-        email_pessoa = request.form.get("to")
-        data = request.form.get("date")
-        mensagem = request.form.get("message")
-        hora_atual = datetime.now().strftime("%H:%M:%S")
+        if 'gerar_pdf' in request.form:
+            GeradorPDF.gerar_pdf("bancoDeCartas/"+str(nome).lower()+"/"+str(nome)+".txt", "bancoDeCartas/"+str(nome).lower()+"/"+"historicoDe"+str(nome)+".pdf")
+            return render_template("escreverCarta.html")
 
-        caminho_carta = "bancoDeCartas/"+str(nome).lower()+"/"+str(nome)+".txt"
+        if 'botao' in request.form:
+            # Obtém os dados do formulário para escrever uma carta
+            seu_email = request.form.get("from")
+            email_pessoa = request.form.get("to")
+            data = request.form.get("date")
+            mensagem = request.form.get("message")
+            hora_atual = datetime.now().strftime("%H:%M:%S")
 
-        # Escreve a carta no arquivo correspondente
-        with open(caminho_carta, "a") as arquivo:
-            # Escreve no histórico de envio do usuario
-            arquivo.write("\n\nData: "+str(data)+"\nDestinatario: "+
-            str(email_pessoa)+"\nMensagem: "+str(mensagem)+"\nRemetente: "+str(seu_email)+
-            "\nHorario de envio: "+str(hora_atual))
+            caminho_carta = "bancoDeCartas/"+str(nome).lower()+"/"+str(nome)+".txt"
 
-    # Redireciona de volta para a tela de login
-    return render_template('telaDeLogin.html')
+            # Escreve a carta no arquivo correspondente
+            with open(caminho_carta, "a") as arquivo:
+                # Escreve no histórico de envio do usuario
+                arquivo.write("\n\nData: "+str(data)+"\nDestinatario: "+
+                str(email_pessoa)+"\nMensagem: "+str(mensagem)+"\nRemetente: "+str(seu_email)+
+                "\nHorario de envio: "+str(hora_atual))
+
+                # Redireciona de volta para a tela de login
+            return render_template('telaDeLogin.html')
 
 # Função para iniciar o site
 def inicia_site():

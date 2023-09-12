@@ -1,2 +1,4 @@
 ['usuario1teste', 'usuario1teste']
 ['Artur', 'senha123']
+['Eduardo dos Santos', '123456']
+['RebeccaGS', 'oioi']
