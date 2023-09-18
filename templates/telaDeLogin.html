@@ -1,12 +1,93 @@
-<html>
-	<body>
-		<form method = "POST" action="/login">
-		<H1>Bem vindo ao email</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #810303;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-		<p>Nome: <input type="text" id="nome" name="nome"></p>
-		<p>Senha: <input type= "password" id="senha" name="senha"></p>
-		<input type="submit" value="login">
-		<input type="submit" name = "cadastro" value="cadastro"></input>
-		</form>
-	</body>
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 5px;
+            margin: 0px 5;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+			font-weight: bol;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-cadastro {
+            background-color: #28a745;
+        }
+
+        .btn-cadastro:hover {
+            background-color: #1f8e3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bem vindo ao email</h1>
+        <form method="POST" action="/login">
+            <p>Nome: <input type="text" id="nome" name="nome"></p>
+            <p>Senha: <input type="password" id="senha" name="senha"></p>
+            <input type="submit" value="Login">
+            <br>
+            <input type="submit" name="cadastro" class="btn-cadastro" value="Cadastro">
+        </form>
+    </div>
+</body>
 </html>
