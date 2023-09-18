@@ -1,34 +1,23 @@
+"""
+Projeto de:
+
+Artur Gonçalves de Castro Rodrigues
+123449672
+
+Eduardo Guimarães Junior
+120138955
+
+Rebecca gomes simão
+120172129
+
+"""
+
 from flask import Flask, render_template, request
 import os
 from datetime import datetime
 import webbrowser
 import threading
 from geradorDePdf import *
-
-"""
-/projeto
-  main.py
-  /templates
-    main.html
-  /static
-    main.css
-    main.js
-
-w3school.com
-
-falta:
-  - tratamento de erro (cadastro, login)
-  - html bem desenvolvido
-  - css bem desenvolvido
-  - codigo documentado
-  - divisão adequada do código
-  - pop-up de aviso de erro
-  - tela de opção de exibir escrever carta ou gerar pdf
-  - gerar pdf
-  - txt de envios
-  - txt de recebidos
-
-"""
 
 # Inicializa o Flask
 app = Flask(__name__)
